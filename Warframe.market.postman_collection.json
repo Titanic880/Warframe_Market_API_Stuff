@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "62ead983-d26c-4a37-a52c-a649d196e4cd",
+		"name": "Warframe.market",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login request",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWQiOiI3M3J3QWZ0cjBhYmYyaXB4NzdBcXZ3ZTBWY3JibGNTeSIsImNzcmZfdG9rZW4iOiI5Njc2YmZkZjgyZGU3MmU4YjBlYzRmZTNmNjU4MDY5MTBiOTNkZjQ5IiwiZXhwIjoxNjI1MzU2Nzk2LCJpYXQiOjE2MjAxNzI3OTYsImlzcyI6Imp3dCIsImF1ZCI6Imp3dCIsImF1dGhfdHlwZSI6ImNvb2tpZSIsInNlY3VyZSI6ZmFsc2UsImp3dF9pZGVudGl0eSI6IlNGQXRvaWxEOHk5Q2REWTVLbHBRUFc3TnVTNFRoWHBxIiwibG9naW5fdWEiOiJiJ01vemlsbGEvNS4wIChXaW5kb3dzIE5UIDEwLjA7IFdpbjY0OyB4NjQ7IHJ2Ojg4LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvODguMCciLCJsb2dpbl9pcCI6ImInMjYwNDozZDA5OjIyODc6YTUwMDphNTBhOjQ5OjhhNGM6MzRhYicifQ.mhZr1LWM1oAV12ZudAY3gxJ6R3_NBCv_-j4SQm6XyH8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaWQiOiI3M3J3QWZ0cjBhYmYyaXB4NzdBcXZ3ZTBWY3JibGNTeSIsImNzcmZfdG9rZW4iOiI5Njc2YmZkZjgyZGU3MmU4YjBlYzRmZTNmNjU4MDY5MTBiOTNkZjQ5IiwiZXhwIjoxNjI1MzU3OTY2LCJpYXQiOjE2MjAxNzM5NjYsImlzcyI6Imp3dCIsImF1ZCI6Imp3dCIsImF1dGhfdHlwZSI6ImNvb2tpZSIsInNlY3VyZSI6ZmFsc2UsImp3dF9pZGVudGl0eSI6IlNGQXRvaWxEOHk5Q2REWTVLbHBRUFc3TnVTNFRoWHBxIiwibG9naW5fdWEiOiJiJ01vemlsbGEvNS4wIChXaW5kb3dzIE5UIDEwLjA7IFdpbjY0OyB4NjQ7IHJ2Ojg4LjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvODguMCciLCJsb2dpbl9pcCI6ImInMjYwNDozZDA5OjIyODc6YTUwMDphNTBhOjQ5OjhhNGM6MzRhYicifQ.P7blX6L7eRlKb9MPC5nupiqyNkGn_X57ALUq3gVFCnI",
+						"description": "Authorization",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"auth_type\": \"header\",\r\n  \"email\": \"{{WF.Market-Email}}\",\r\n  \"password\": \"{{WF.Market-Password}}\",\r\n  \"device_id\": \"1\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.warframe.market/v1/auth/signin",
+					"protocol": "https",
+					"host": [
+						"api",
+						"warframe",
+						"market"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Items_List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.warframe.market/v1/items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"warframe",
+						"market"
+					],
+					"path": [
+						"v1",
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific Order",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.warframe.market/v1/items/secura_dual_cestra/orders?include=item",
+					"protocol": "https",
+					"host": [
+						"api",
+						"warframe",
+						"market"
+					],
+					"path": [
+						"v1",
+						"items",
+						"secura_dual_cestra",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "include",
+							"value": "item"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Specific Order W/ Var",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Specific Item w/ Var",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Specific Item",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7f5d7e74-10d2-42e7-b4fd-aa7fc60bae1d",
+			"key": "WF.Market-Email",
+			"value": "Mitchelljohansen9@gmail.com"
+		},
+		{
+			"id": "ffbc3bec-03a0-4541-bf48-ac12bee1f557",
+			"key": "WF.Market-Password",
+			"value": "KiuHxxxQmr"
+		},
+		{
+			"id": "c6d07203-8991-43f0-a9bc-f159d6737fe0",
+			"key": "Url_Name_Item",
+			"value": "secura_dual_cestra"
+		}
+	]
+}
