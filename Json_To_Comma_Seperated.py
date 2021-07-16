@@ -14,7 +14,7 @@ def Rebuild_CSV():
 def Add_To_CSV(ITEM_URL):
     f = open(ITEM_URL+'.json',)
     data = json.load(f)
-    f = open(Temp_File, 'a')
+    f = open(CSV_Name, 'a')
     for i in data["payload"]["orders"]:
         if i['order_type'] == 'sell' and i['user']['status'] == 'ingame':
             f.write(
