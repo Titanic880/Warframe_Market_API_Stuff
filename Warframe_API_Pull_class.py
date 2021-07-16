@@ -82,7 +82,7 @@ class API_Pull:
         f = open(self.Frame_JSON_Name, 'r')
         data = json.load(f)
         f = open(self.Frames_CSV_Name, 'w')
-        f.write('Name,Health,Shields,Armor,Energy Cap, Sprint Speed,Mastery Requirement')
+        f.write('Name,Health,Shields,Armor,Energy Cap, Sprint Speed,MR Req')
         for i in data:
             f.write('\n'+
             str(i['name'])+','+
@@ -92,4 +92,35 @@ class API_Pull:
             str(i['power'])+','+
             str(i['sprintSpeed'])+','+
             str(i['masteryReq']))
+        return
+    def weapon_Base_Stats(self):
+        f = open(self.Weapon_JSON_Name,'r')
+        data = json.load(f)
+        f = open(self.Weapon_CSV_Name, 'w')
+        f.write('Name,Category,Type,Riven Dispo,MR Req,'+
+        'Accuracy,Crit Chance,Crit Damage,Fire Rate,'+
+        'MultiShot,Noise,Reload Time,Status Chance,Trigger Style,'+
+        'Impact,Puncture,Slash')
+        for i in data:
+            print(i['name']+' '+i['category'])
+            if i['category'] == "Primary" and i['productCategory'] != "SentinelWeapons":
+                f.write('\n'+
+                str(i['name'])+','+
+                str(i['category'])+','+
+                str(i['type'])+','+
+                str(i['disposition'])+','+
+                str(i['masteryReq'])+','+
+                str(i['accuracy'])+','+
+                str(i['criticalChance'])+','+
+                str(i['criticalMultiplier'])+','+
+                str(i['fireRate'])+','+
+                str(i['multishot'])+','+
+                str(i['noise'])+','+
+                str(i['reloadTime'])+','+
+                str(i['procChance'])+','+
+                str(i['trigger'])+','+
+                str(i['damagePerShot'][0])+','+
+                str(i['damagePerShot'][1])+','+
+                str(i['damagePerShot'][2])
+            )
         return
