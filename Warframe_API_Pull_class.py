@@ -3,10 +3,10 @@ import requests
 import json
 import os
 
-def Get_From_API(self, Specific):
+def Get_From_API(Specific):
     print('Pulling '+Specific+' Data from API, this might take awhile!')
     return requests.get('https://api.warframestat.us/'+Specific)
-def To_Json(self, File_Name, Request):
+def To_Json(File_Name, Request):
     if Request.status_code >= 400:
         print('Error: '+ str(Request.status_code))
         return
@@ -14,7 +14,7 @@ def To_Json(self, File_Name, Request):
     with open(File_Name, 'w') as dumping:
         json.dump(UnDumped,dumping)
     return
-def Make_File(self, File_Name, Default_Contents):
+def Make_File(File_Name, Default_Contents):
     f = open(File_Name, "x")
     f.write(str(Default_Contents))
     print(File_Name+' File Made!')
@@ -25,15 +25,16 @@ class API_Pull:
     Weapon_JSON_Name = Folder_Name+'/weapons.json'
     Frame_JSON_Name = Folder_Name+'/warframes.json'
     Weapon_CSV_Name = Folder_Name+'/weapons_Output.csv'
+    Melee_CSV_Name = Folder_Name+'/Melee_Output.csv'
     Frames_CSV_Name = Folder_Name+'/frames_Output.csv'
     Mastery_File = Folder_Name+'/Mastery_Rank.txt'
     Search_By_Name = Folder_Name+'/Name_Find.txt'
-    Search_Result = Folder_Name+'/Search_Result.txt'
+    Search_Result = Folder_Name+'/Search_Result.json'
     def __init__(self):
         if not exists(self.Folder_Name):
             os.mkdir(self.Folder_Name)
         if not exists(self.Mastery_File):
-            Make_File(self.Mastery_File, 5)
+            Make_File(self.Mastery_File, '5')
         if not exists(self.Search_By_Name):
             Make_File(self.Search_By_Name, 'weapons,Acceltra')
         if not exists(self.Weapon_JSON_Name):
@@ -43,6 +44,7 @@ class API_Pull:
     def Find_Specific(self):
         f = open(self.Search_By_Name)
         name = str(f.read()).split(',')
+        print('Searching for: '+name[0]+' ; '+name[1])
         f = open(self.Folder_Name+'/'+name[0]+'.json', 'r')
         data = json.load(f)
         f = open(self.Search_Result, 'w')
@@ -71,13 +73,19 @@ class API_Pull:
         f = open(self.Weapon_JSON_Name,'r')
         data = json.load(f)
         f = open(self.Weapon_CSV_Name, 'w')
+        m = open(self.Melee_CSV_Name, 'w')
         f.write('Name,Category,Type,Riven Dispo,MR Req,'+
-        'Accuracy,Crit Chance,Crit Damage,Fire Rate,'+
+        'Accuracy,Crit Chance,Crit Multiplier,Fire Rate,'+
         'MultiShot,Noise,Reload Time,Status Chance,Trigger Style,'+
         'Impact,Puncture,Slash')
+        #THIS IS A SPACING WHILE I FIGURE OUT THE MELEE SECTION CAUSE IM STUPID
+        m.write('Name,Type,Riven Dispo,MR Req,Attack Speed,Blocking Angle,'+
+        'Combo Duration,Crit Chance,Crit Multiplier,Follow Through,'+
+        'Range,Slam Attack,Slam Radial Dmg,Slam Radius,Slide Attack,'+
+        'Status Chance,Impact,Puncture,Slash,'+
+        'Heavy Dmg,HSlam Attack,HSlam Radial Dmg,Wind Up')
         for i in data:
-            print(i['name']+' '+i['category'])
-            if i['category'] == "Primary" and i['productCategory'] != "SentinelWeapons":
+            if i['category'] != "Melee" and i['productCategory'] != 'SentinelWeapons':
                 f.write('\n'+
                 str(i['name'])+','+
                 str(i['category'])+','+
@@ -97,4 +105,34 @@ class API_Pull:
                 str(i['damagePerShot'][1])+','+
                 str(i['damagePerShot'][2])
             )
+            else:
+                if i['category'] == 'Melee' and i['productCategory'] != 'SentinelWeapons':
+                    try:
+                        m.write('\n'+
+                        str(i['name'])+','+
+                        str(i['type'])+','+
+                        str(i['disposition'])+','+
+                        str(i['masteryReq'])+','+
+                        str(i['fireRate'])+','+
+                        str(i['blockingAngle'])+','+
+                        str(i['comboDuration'])+','+
+                        str(i['criticalChance'])+','+
+                        str(i['criticalMultiplier'])+','+
+                        str(i['followThrough'])+','+
+                        str(i['range'])+','+
+                        str(i['slamAttack'])+','+
+                        str(i['slamRadialDamage'])+','+
+                        str(i['slamRadius'])+','+
+                        str(i['slideAttack'])+','+
+                        str(i['procChance'])+','+
+                        str(i['damagePerShot'][0])+','+
+                        str(i['damagePerShot'][1])+','+
+                        str(i['damagePerShot'][2])+','+
+                        str(i['heavyAttackDamage'])+','+
+                        str(i['heavySlamAttack'])+','+
+                        str(i['heavySlamRadialDamage'])+','+
+                        str(i['windUp'])
+                        )
+                    except:
+                        print('Error with: '+i['name']+" (Error Weapons will not appear in CSV's)")
         return
