@@ -78,3 +78,18 @@ class API_Pull:
                 return
         print('item: '+name[1]+' was not found!')
         return
+    def warframe_Base_Stats(self):
+        f = open(self.Frame_JSON_Name, 'r')
+        data = json.load(f)
+        f = open(self.Frames_CSV_Name, 'w')
+        f.write('Name,Health,Shields,Armor,Energy Cap, Sprint Speed,Mastery Requirement')
+        for i in data:
+            f.write('\n'+
+            str(i['name'])+','+
+            str(i['health'])+','+
+            str(i['shield'])+','+
+            str(i['armor'])+','+
+            str(i['power'])+','+
+            str(i['sprintSpeed'])+','+
+            str(i['masteryReq']))
+        return
