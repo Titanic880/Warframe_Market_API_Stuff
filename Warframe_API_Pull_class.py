@@ -3,6 +3,23 @@ import requests
 import json
 import os
 
+def Get_From_API(self, Specific):
+    print('Pulling '+Specific+' Data from API, this might take awhile!')
+    return requests.get('https://api.warframestat.us/'+Specific)
+def To_Json(self, File_Name, Request):
+    if Request.status_code >= 400:
+        print('Error: '+ str(Request.status_code))
+        return
+    UnDumped = Request.json()
+    with open(File_Name, 'w') as dumping:
+        json.dump(UnDumped,dumping)
+    return
+def Make_File(self, File_Name, Default_Contents):
+    f = open(File_Name, "x")
+    f.write(str(Default_Contents))
+    print(File_Name+' File Made!')
+    return
+
 class API_Pull:
     Folder_Name = 'TestData'
     Weapon_JSON_Name = Folder_Name+'/weapons.json'
@@ -16,56 +33,13 @@ class API_Pull:
         if not exists(self.Folder_Name):
             os.mkdir(self.Folder_Name)
         if not exists(self.Mastery_File):
-            self.Make_File(self.Mastery_File, 5)
+            Make_File(self.Mastery_File, 5)
         if not exists(self.Search_By_Name):
-            self.Make_File(self.Search_By_Name, 'weapons,Acceltra')
+            Make_File(self.Search_By_Name, 'weapons,Acceltra')
         if not exists(self.Weapon_JSON_Name):
-            self.To_File(self.Weapon_JSON_Name,self.Get_From_API('weapons'))
+            To_Json(self.Weapon_JSON_Name,Get_From_API('weapons'))
         if not exists(self.Frame_JSON_Name):
-            self.To_File(self.Frame_JSON_Name,self.Get_From_API('warframes'))
-    def Get_From_API(self, Specific):
-        print('Pulling '+Specific+' Data from API, this might take awhile!')
-        return requests.get('https://api.warframestat.us/'+Specific)
-    def To_File(self, File_Name, Request):
-        if Request.status_code >= 400:
-            print('Error: '+ str(Request.status_code))
-            return
-        UnDumped = Request.json()
-        with open(File_Name, "w") as dumping:
-            json.dump(UnDumped,dumping)
-        return
-    def To_Json(self, File_Name, Request):
-        if Request.status_code >= 400:
-            print('Error: '+ str(Request.status_code))
-            return
-        UnDumped = Request.json()
-        with open(File_Name, 'w') as dumping:
-            json.dump(UnDumped,dumping)
-        return
-    def To_CSV(self, Source, Destination):
-        f = open(self.Mastery_File)
-        MasteryCap = int(f.read())
-        f = open(Destination, 'w')
-        f.write('Name, Mastery Level\n')
-        f = open(Source)
-        data = json.load(f)
-        f = open(Destination, 'a')
-        for i in data:
-            if(i['masteryReq'] <= MasteryCap):
-                f.write('\n'+
-                str(i['name'])+","+
-                str(i['masteryReq']))
-        f.close()
-        return
-    def Get_File_Contents(self, File_Name):
-        f = open(File_Name, 'r')
-        vTemp = f.read()
-        return vTemp
-    def Make_File(self, File_Name, Default_Contents):
-        f = open(File_Name, "x")
-        f.write(str(Default_Contents))
-        print(File_Name+' File Made!')
-        return
+            To_Json(self.Frame_JSON_Name,Get_From_API('warframes'))
     def Find_Specific(self):
         f = open(self.Search_By_Name)
         name = str(f.read()).split(',')
