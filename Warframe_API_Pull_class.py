@@ -1,3 +1,4 @@
+#from _typeshed import Self
 from os.path import exists
 import requests
 import json
@@ -22,6 +23,7 @@ def Make_File(File_Name, Default_Contents):
 
 class API_Pull:
     Folder_Name = 'TestData'
+    Error_Log_Name = Folder_Name+'/Error_Items.txt'
     Weapon_JSON_Name = Folder_Name+'/weapons.json'
     Frame_JSON_Name = Folder_Name+'/warframes.json'
     Weapon_CSV_Name = Folder_Name+'/weapons_Output.csv'
@@ -41,6 +43,8 @@ class API_Pull:
             To_Json(self.Weapon_JSON_Name,Get_From_API('weapons'))
         if not exists(self.Frame_JSON_Name):
             To_Json(self.Frame_JSON_Name,Get_From_API('warframes'))
+        if not exists(self.Error_Log_Name):
+            Make_File(self.Error_Log_Name, "Issue items will be named here:")
     def Find_Specific(self):
         f = open(self.Search_By_Name)
         name = str(f.read()).split(',')
@@ -74,6 +78,7 @@ class API_Pull:
         data = json.load(f)
         f = open(self.Weapon_CSV_Name, 'w')
         m = open(self.Melee_CSV_Name, 'w')
+        e = open(self.Error_Log_Name, 'w')
         f.write('Name,Category,Type,Riven Dispo,MR Req,'+
         'Accuracy,Crit Chance,Crit Multiplier,Fire Rate,'+
         'MultiShot,Noise,Reload Time,Status Chance,Trigger Style,'+
@@ -86,25 +91,29 @@ class API_Pull:
         'Heavy Dmg,HSlam Attack,HSlam Radial Dmg,Wind Up')
         for i in data:
             if i['category'] != "Melee" and i['productCategory'] != 'SentinelWeapons':
-                f.write('\n'+
-                str(i['name'])+','+
-                str(i['category'])+','+
-                str(i['type'])+','+
-                str(i['disposition'])+','+
-                str(i['masteryReq'])+','+
-                str(i['accuracy'])+','+
-                str(i['criticalChance'])+','+
-                str(i['criticalMultiplier'])+','+
-                str(i['fireRate'])+','+
-                str(i['multishot'])+','+
-                str(i['noise'])+','+
-                str(i['reloadTime'])+','+
-                str(i['procChance'])+','+
-                str(i['trigger'])+','+
-                str(i['damagePerShot'][0])+','+
-                str(i['damagePerShot'][1])+','+
-                str(i['damagePerShot'][2])
-            )
+                try:
+                    f.write('\n'+
+                    str(i['name'])+','+
+                    str(i['category'])+','+
+                    str(i['type'])+','+
+                    str(i['disposition'])+','+
+                    str(i['masteryReq'])+','+
+                    str(i['accuracy'])+','+
+                    str(i['criticalChance'])+','+
+                    str(i['criticalMultiplier'])+','+
+                    str(i['fireRate'])+','+
+                    str(i['multishot'])+','+
+                    str(i['noise'])+','+
+                    str(i['reloadTime'])+','+
+                    str(i['procChance'])+','+
+                    str(i['trigger'])+','+
+                    str(i['damagePerShot'][0])+','+
+                    str(i['damagePerShot'][1])+','+
+                    str(i['damagePerShot'][2])
+                )
+                except:
+                    e.write('\n'+str(i['name'])+','+str(i['type']))
+                    print("Item(s) Added to error file")
             else:
                 if i['category'] == 'Melee' and i['productCategory'] != 'SentinelWeapons':
                     try:
@@ -134,5 +143,6 @@ class API_Pull:
                         str(i['windUp'])
                         )
                     except:
-                        print('Error with: '+i['name']+" (Error Weapons will not appear in CSV's)")
+                        e.write('\n'+str(i['name'])+','+str(i['type']))
+                        print("Item(s) Added to error file")
         return
